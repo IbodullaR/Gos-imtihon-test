@@ -1,0 +1,1022 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GOS Imtihon Tayyorgarlik | Marketing</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0e1a;
+    --surface: #111827;
+    --card: #1a2236;
+    --border: #2a3a5c;
+    --accent: #4f8ef7;
+    --accent2: #a78bfa;
+    --gold: #f5c842;
+    --green: #22d3a0;
+    --red: #f87171;
+    --text: #e8eaf6;
+    --muted: #8892b0;
+    --easy: #22d3a0;
+    --medium: #f5c842;
+    --hard: #f87171;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+  /* Stars background */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      radial-gradient(1px 1px at 20% 30%, rgba(255,255,255,0.15) 0%, transparent 100%),
+      radial-gradient(1px 1px at 80% 60%, rgba(255,255,255,0.10) 0%, transparent 100%),
+      radial-gradient(1px 1px at 50% 80%, rgba(255,255,255,0.08) 0%, transparent 100%),
+      radial-gradient(2px 2px at 10% 90%, rgba(79,142,247,0.2) 0%, transparent 100%),
+      radial-gradient(2px 2px at 90% 10%, rgba(167,139,250,0.2) 0%, transparent 100%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* SCREENS */
+  .screen { display:none; position:relative; z-index:1; }
+  .screen.active { display:flex; }
+
+  /* ===== HOME SCREEN ===== */
+  #home {
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 40px 20px;
+    text-align: center;
+  }
+  .logo-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(79,142,247,0.12);
+    border: 1px solid rgba(79,142,247,0.3);
+    border-radius: 100px;
+    padding: 8px 18px;
+    font-size: 13px;
+    color: var(--accent);
+    letter-spacing: 0.08em;
+    margin-bottom: 28px;
+    animation: fadeSlide 0.6s ease;
+  }
+  .logo-badge::before { content: '🎓'; }
+  h1.main-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(36px, 6vw, 64px);
+    font-weight: 900;
+    line-height: 1.1;
+    margin-bottom: 16px;
+    background: linear-gradient(135deg, #e8eaf6 30%, var(--accent) 70%, var(--accent2) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: fadeSlide 0.7s ease;
+  }
+  .subtitle {
+    color: var(--muted);
+    font-size: 16px;
+    max-width: 520px;
+    line-height: 1.7;
+    margin-bottom: 48px;
+    animation: fadeSlide 0.8s ease;
+  }
+  .subjects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 18px;
+    max-width: 900px;
+    width: 100%;
+    margin-bottom: 40px;
+    animation: fadeSlide 0.9s ease;
+  }
+  .subject-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 24px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: left;
+    position: relative;
+    overflow: hidden;
+  }
+  .subject-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, var(--card-color, var(--accent)) 0%, transparent 60%);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .subject-card:hover::before { opacity: 0.08; }
+  .subject-card:hover {
+    border-color: var(--accent);
+    transform: translateY(-4px);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+  }
+  .subject-card.selected {
+    border-color: var(--accent);
+    background: rgba(79,142,247,0.1);
+    box-shadow: 0 0 0 2px rgba(79,142,247,0.3);
+  }
+  .subject-card .icon { font-size: 28px; margin-bottom: 12px; }
+  .subject-card h3 { font-size: 15px; font-weight: 600; margin-bottom: 6px; }
+  .subject-card .count { font-size: 12px; color: var(--muted); }
+  .subject-card .check {
+    position: absolute; top: 14px; right: 14px;
+    width: 22px; height: 22px;
+    background: var(--accent);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px;
+    opacity: 0; transition: opacity 0.3s;
+  }
+  .subject-card.selected .check { opacity: 1; }
+
+  .mode-section {
+    max-width: 900px;
+    width: 100%;
+    margin-bottom: 32px;
+    animation: fadeSlide 1s ease;
+  }
+  .mode-section h2 { font-size: 14px; color: var(--muted); letter-spacing: 0.1em; margin-bottom: 16px; text-align: left; }
+  .mode-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; }
+  .mode-btn {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px 20px;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: left;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .mode-btn:hover { border-color: var(--accent2); background: rgba(167,139,250,0.08); }
+  .mode-btn.selected { border-color: var(--accent2); background: rgba(167,139,250,0.12); }
+  .mode-icon { font-size: 22px; }
+  .mode-info { flex: 1; }
+  .mode-info .name { font-size: 14px; font-weight: 600; margin-bottom: 2px; }
+  .mode-info .desc { font-size: 12px; color: var(--muted); }
+
+  .start-btn {
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    color: white;
+    border: none;
+    border-radius: 14px;
+    padding: 18px 48px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: 'DM Sans', sans-serif;
+    letter-spacing: 0.02em;
+    animation: fadeSlide 1.1s ease;
+    box-shadow: 0 8px 32px rgba(79,142,247,0.3);
+  }
+  .start-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 40px rgba(79,142,247,0.4);
+  }
+  .start-btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+
+  /* ===== QUIZ SCREEN ===== */
+  #quiz {
+    flex-direction: column;
+    min-height: 100vh;
+    padding: 0;
+  }
+  .quiz-header {
+    background: rgba(17,24,39,0.95);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 16px 24px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .quiz-subject-tag {
+    background: rgba(79,142,247,0.15);
+    color: var(--accent);
+    border: 1px solid rgba(79,142,247,0.3);
+    border-radius: 8px;
+    padding: 4px 12px;
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+  .quiz-progress-wrap { flex: 1; }
+  .progress-bar {
+    width: 100%;
+    height: 6px;
+    background: var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    border-radius: 10px;
+    transition: width 0.4s ease;
+  }
+  .progress-text { font-size: 12px; color: var(--muted); margin-top: 4px; }
+  .quiz-score-display {
+    display: flex; gap: 12px; align-items: center;
+  }
+  .score-chip {
+    display: flex; align-items: center; gap: 6px;
+    font-size: 13px; font-weight: 600;
+  }
+  .score-chip.correct { color: var(--green); }
+  .score-chip.wrong { color: var(--red); }
+  .timer-chip {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 4px 12px;
+    font-size: 14px;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    min-width: 60px;
+    text-align: center;
+  }
+  .timer-chip.warning { border-color: var(--gold); color: var(--gold); }
+  .timer-chip.danger { border-color: var(--red); color: var(--red); animation: pulse 0.5s infinite; }
+
+  .quiz-body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px 20px;
+    max-width: 760px;
+    margin: 0 auto;
+    width: 100%;
+  }
+  .question-meta {
+    display: flex; align-items: center; gap: 10px;
+    margin-bottom: 24px;
+    width: 100%;
+  }
+  .q-number {
+    font-size: 13px;
+    color: var(--muted);
+  }
+  .difficulty-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    border-radius: 100px;
+    padding: 3px 10px;
+    text-transform: uppercase;
+  }
+  .diff-1 { background: rgba(34,211,160,0.12); color: var(--easy); border: 1px solid rgba(34,211,160,0.3); }
+  .diff-2 { background: rgba(245,200,66,0.12); color: var(--medium); border: 1px solid rgba(245,200,66,0.3); }
+  .diff-3 { background: rgba(248,113,113,0.12); color: var(--hard); border: 1px solid rgba(248,113,113,0.3); }
+  .fan-badge {
+    background: rgba(167,139,250,0.1);
+    color: var(--accent2);
+    border: 1px solid rgba(167,139,250,0.25);
+    border-radius: 100px;
+    padding: 3px 10px;
+    font-size: 11px;
+    margin-left: auto;
+  }
+  .question-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 32px;
+    width: 100%;
+    margin-bottom: 24px;
+    animation: fadeSlide 0.4s ease;
+  }
+  .question-text {
+    font-size: 17px;
+    line-height: 1.65;
+    font-weight: 500;
+    color: var(--text);
+  }
+  .options-list { display: flex; flex-direction: column; gap: 10px; width: 100%; }
+  .option-btn {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 16px 20px;
+    text-align: left;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    color: var(--text);
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    animation: slideIn 0.3s ease both;
+    position: relative;
+    overflow: hidden;
+  }
+  .option-btn:nth-child(1) { animation-delay: 0.05s; }
+  .option-btn:nth-child(2) { animation-delay: 0.1s; }
+  .option-btn:nth-child(3) { animation-delay: 0.15s; }
+  .option-btn:nth-child(4) { animation-delay: 0.2s; }
+  .option-letter {
+    width: 32px; height: 32px;
+    background: rgba(255,255,255,0.05);
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 700;
+    flex-shrink: 0;
+    transition: all 0.2s;
+  }
+  .option-btn:hover:not(:disabled) {
+    border-color: var(--accent);
+    background: rgba(79,142,247,0.08);
+    transform: translateX(4px);
+  }
+  .option-btn:hover:not(:disabled) .option-letter {
+    background: var(--accent);
+    color: white;
+  }
+  .option-btn.correct {
+    border-color: var(--green);
+    background: rgba(34,211,160,0.1);
+  }
+  .option-btn.correct .option-letter { background: var(--green); color: #0a0e1a; }
+  .option-btn.wrong {
+    border-color: var(--red);
+    background: rgba(248,113,113,0.08);
+  }
+  .option-btn.wrong .option-letter { background: var(--red); color: white; }
+  .option-btn.reveal-correct {
+    border-color: rgba(34,211,160,0.5);
+    background: rgba(34,211,160,0.05);
+  }
+  .option-btn:disabled { cursor: default; transform: none; }
+  .option-icon { margin-left: auto; font-size: 18px; opacity: 0; transition: opacity 0.2s; }
+  .option-btn.correct .option-icon,
+  .option-btn.wrong .option-icon { opacity: 1; }
+
+  .feedback-box {
+    width: 100%;
+    border-radius: 12px;
+    padding: 14px 18px;
+    font-size: 14px;
+    line-height: 1.5;
+    margin-top: 12px;
+    display: none;
+    animation: fadeIn 0.3s ease;
+  }
+  .feedback-box.correct { background: rgba(34,211,160,0.1); border: 1px solid rgba(34,211,160,0.3); color: var(--green); }
+  .feedback-box.wrong { background: rgba(248,113,113,0.08); border: 1px solid rgba(248,113,113,0.25); color: #fca5a5; }
+  .next-btn {
+    margin-top: 24px;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    color: white;
+    border: none;
+    border-radius: 12px;
+    padding: 14px 40px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    transition: all 0.2s;
+    display: none;
+  }
+  .next-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(79,142,247,0.3); }
+
+  /* ===== RESULT SCREEN ===== */
+  #result {
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 40px 20px;
+    text-align: center;
+  }
+  .result-badge {
+    width: 120px; height: 120px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 48px;
+    margin-bottom: 28px;
+    animation: bounceIn 0.6s ease;
+    position: relative;
+  }
+  .result-badge::before {
+    content: '';
+    position: absolute;
+    inset: -4px;
+    border-radius: 50%;
+    background: conic-gradient(var(--accent), var(--accent2), var(--accent));
+    z-index: -1;
+    animation: spin 3s linear infinite;
+  }
+  .result-badge::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: var(--bg);
+    z-index: -1;
+    transform: scale(0.92);
+  }
+  .grade-display {
+    font-family: 'Playfair Display', serif;
+    font-size: 72px;
+    font-weight: 900;
+    margin-bottom: 8px;
+    background: linear-gradient(135deg, var(--gold), #f97316);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: fadeSlide 0.7s ease;
+  }
+  .grade-label { font-size: 18px; color: var(--muted); margin-bottom: 32px; animation: fadeSlide 0.8s ease; }
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+    max-width: 500px;
+    width: 100%;
+    margin-bottom: 32px;
+    animation: fadeSlide 0.9s ease;
+  }
+  .stat-box {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 18px 12px;
+  }
+  .stat-box .val { font-size: 28px; font-weight: 700; margin-bottom: 4px; }
+  .stat-box .lbl { font-size: 12px; color: var(--muted); }
+  .stat-box.s-correct .val { color: var(--green); }
+  .stat-box.s-wrong .val { color: var(--red); }
+  .stat-box.s-score .val { color: var(--gold); }
+  .verdict-card {
+    max-width: 480px;
+    width: 100%;
+    border-radius: 16px;
+    padding: 20px 24px;
+    font-size: 15px;
+    line-height: 1.6;
+    margin-bottom: 32px;
+    animation: fadeSlide 1s ease;
+  }
+  .verdict-card.pass { background: rgba(34,211,160,0.08); border: 1px solid rgba(34,211,160,0.3); color: #6ee7b7; }
+  .verdict-card.fail { background: rgba(248,113,113,0.08); border: 1px solid rgba(248,113,113,0.25); color: #fca5a5; }
+  .result-btns { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; animation: fadeSlide 1.1s ease; }
+  .btn-secondary {
+    background: var(--card);
+    border: 1px solid var(--border);
+    color: var(--text);
+    border-radius: 12px;
+    padding: 13px 28px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    transition: all 0.2s;
+  }
+  .btn-secondary:hover { border-color: var(--accent); background: rgba(79,142,247,0.08); }
+
+  /* BADGE breakdown */
+  .subjects-breakdown {
+    display: flex; gap: 10px; flex-wrap: wrap; justify-content: center;
+    max-width: 500px; margin-bottom: 28px;
+    animation: fadeSlide 0.95s ease;
+  }
+  .sb-chip {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    padding: 6px 14px;
+    font-size: 13px;
+    display: flex; gap: 8px; align-items: center;
+  }
+  .sb-chip .dot { width: 6px; height: 6px; border-radius: 50%; }
+
+  @keyframes fadeSlide { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:translateY(0); } }
+  @keyframes slideIn { from { opacity:0; transform:translateX(-12px); } to { opacity:1; transform:translateX(0); } }
+  @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+  @keyframes bounceIn { 0%{transform:scale(0.3)} 60%{transform:scale(1.1)} 100%{transform:scale(1)} }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.5} }
+
+  @media (max-width: 600px) {
+    .quiz-score-display { display: none; }
+    .stats-grid { grid-template-columns: repeat(3,1fr); }
+    .question-card { padding: 20px; }
+    .question-text { font-size: 15px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HOME -->
+<div id="home" class="screen active">
+  <div class="logo-badge">GOS Imtihon Tayyorgarlik 2026</div>
+  <h1 class="main-title">Marketing<br>Test Markazi</h1>
+  <p class="subtitle">3 ta fan bo'yicha 50 savollik test. To'g'ri javoblar foiziga qarab baho qo'yiladi. 55%+ — 3, 70%+ — 4, 85%+ — 5</p>
+
+  <div class="subjects-grid">
+    <div class="subject-card" data-subject="asoslari" onclick="toggleSubject(this)">
+      <div class="icon">📊</div>
+      <h3>Marketing Asoslari</h3>
+      <p class="count">40+ savol • 1–3 qiyinlik</p>
+      <div class="check">✓</div>
+    </div>
+    <div class="subject-card" data-subject="tadqiqotlari" onclick="toggleSubject(this)">
+      <div class="icon">🔬</div>
+      <h3>Marketing Tadqiqotlari</h3>
+      <p class="count">80+ savol • 2–3 qiyinlik</p>
+      <div class="check">✓</div>
+    </div>
+    <div class="subject-card" data-subject="kommunikatsiya" onclick="toggleSubject(this)">
+      <div class="icon">📢</div>
+      <h3>Marketing Kommunikatsiyasi</h3>
+      <p class="count">80+ savol • 1–3 qiyinlik</p>
+      <div class="check">✓</div>
+    </div>
+  </div>
+
+  <div class="mode-section">
+    <h2>SINOV REJIMI</h2>
+    <div class="mode-grid">
+      <div class="mode-btn selected" data-mode="exam" onclick="selectMode(this)">
+        <span class="mode-icon">🎯</span>
+        <div class="mode-info">
+          <div class="name">Imtihon</div>
+          <div class="desc">50 savol, vaqt 60 daqiqa</div>
+        </div>
+      </div>
+      <div class="mode-btn" data-mode="practice" onclick="selectMode(this)">
+        <span class="mode-icon">📚</span>
+        <div class="mode-info">
+          <div class="name">Mashq</div>
+          <div class="desc">20 savol, javob ko'rsatiladi</div>
+        </div>
+      </div>
+      <div class="mode-btn" data-mode="quick" onclick="selectMode(this)">
+        <span class="mode-icon">⚡</span>
+        <div class="mode-info">
+          <div class="name">Tezkor</div>
+          <div class="desc">10 savol, 20 daqiqa</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <button class="start-btn" onclick="startQuiz()" id="startBtn">Testni Boshlash →</button>
+</div>
+
+<!-- QUIZ -->
+<div id="quiz" class="screen">
+  <div class="quiz-header">
+    <div class="quiz-subject-tag" id="quizSubjectTag">Marketing</div>
+    <div class="quiz-progress-wrap">
+      <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+      <div class="progress-text" id="progressText">Savol 1 / 50</div>
+    </div>
+    <div class="quiz-score-display">
+      <div class="score-chip correct">✓ <span id="correctCount">0</span></div>
+      <div class="score-chip wrong">✗ <span id="wrongCount">0</span></div>
+    </div>
+    <div class="timer-chip" id="timerDisplay">60:00</div>
+  </div>
+
+  <div class="quiz-body">
+    <div class="question-meta">
+      <span class="q-number" id="qNumber">Savol 1</span>
+      <span class="difficulty-badge diff-2" id="diffBadge">⬤ O'rtacha</span>
+      <span class="fan-badge" id="fanBadge">Fan</span>
+    </div>
+    <div class="question-card">
+      <p class="question-text" id="questionText">Savol yuklanmoqda...</p>
+    </div>
+    <div class="options-list" id="optionsList"></div>
+    <div class="feedback-box" id="feedbackBox"></div>
+    <button class="next-btn" id="nextBtn" onclick="nextQuestion()">Keyingi savol →</button>
+  </div>
+</div>
+
+<!-- RESULT -->
+<div id="result" class="screen">
+  <div class="result-badge" id="resultEmoji">🏆</div>
+  <div class="grade-display" id="gradeDisplay">5</div>
+  <div class="grade-label" id="gradeLabel">Mukammal!</div>
+  <div class="stats-grid">
+    <div class="stat-box s-correct">
+      <div class="val" id="resCorrect">0</div>
+      <div class="lbl">To'g'ri</div>
+    </div>
+    <div class="stat-box s-wrong">
+      <div class="val" id="resWrong">0</div>
+      <div class="lbl">Noto'g'ri</div>
+    </div>
+    <div class="stat-box s-score">
+      <div class="val" id="resPercent">0%</div>
+      <div class="lbl">Natija</div>
+    </div>
+  </div>
+  <div class="subjects-breakdown" id="subjectBreakdown"></div>
+  <div class="verdict-card" id="verdictCard"></div>
+  <div class="result-btns">
+    <button class="start-btn" onclick="restartQuiz()">Qayta boshlash</button>
+    <button class="btn-secondary" onclick="goHome()">Asosiy menyu</button>
+  </div>
+</div>
+
+<script>
+// ============================================================
+//  DATA
+// ============================================================
+const allQuestions = {
+  asoslari: [
+    {q:"Marketing atamasi fanga qachon kiritildi?", ans:"1902", opts:["1902","1904","1905","1901"], d:1},
+    {q:"Marketing nima?", ans:"Iste'molchiga nima kerak bulsa ushani ishlab chiqarash va sotish", opts:["Iste'molchiga nima kerak bulsa ushani ishlab chiqarash va sotish","Extiyojni xisobga olmagan xolda ishlab chiqarilgan maxsulotni sotish","Talabni kondirishga karatilgan faoliyatdir","Bozorda maxsulotni sotishdir"], d:1},
+    {q:"Marketing qanday tizimni ifodalaydi?", ans:"Ishlab chiqarish va sotish", opts:["Ishlab chiqarish va sotish","Ishlab chiqarish","Sotish","Ayirboshlash"], d:1},
+    {q:"Iste'molchilar huquqi va manfaatlarini ximoya qilish bo'yicha tashkil qilingan harakat nima deyiladi?", ans:"Konsyumerizm", opts:["Konsyumerizm","Diversivikatsiya","Bixeyvorizm","Materializm"], d:1},
+    {q:"Nima bozorda turli xil tovarlar yordamida aks ettirilgan, doimiy ravishda o'zgarib turuvchi jamoatchilik ehtiyojlari majmuasini aks ettiradi?", ans:"Talabdir", opts:["Talabdir","Takliflar","Reklamalar","Narxlar"], d:1},
+    {q:"Tadbirkorlik, marketing va boshqa faoliyat turlari oldida to'rgan vazifalarni bajarishda yordam berishi mumkin bo'lgan turli xil bilim va ma'lumotlarni qisqacha nima deyiladi?", ans:"Axborotdir", opts:["Axborotdir","Shartnoma","Buyruq","Qaydnoma"], d:2},
+    {q:"Tovar va xizmatlar bozorida iste'molchining manfaatlarini ximoya qilishga qaratilgan qoida va yo'riqnomalar majmui nima deb ataladi?", ans:"Iste'molchining mustaqilligi", opts:["Iste'molchining mustaqilligi","Sotuvchining huquqi","Davlat buyurtmasi","Korxonaning nizomi"], d:2},
+    {q:"Firma assortimentini na firmada qo'llanayotgan texnologiyalarga, na ishlab chiqarilayotgan mahsulotlarga, na hozirgi bozorga hech qanday aloqasi bo'lmagan mahsulotlar bilan to'ldirish qanday ataladi?", ans:"Konglomerat diversifikatsiyadir", opts:["Konglomerat diversifikatsiyadir","Bixeyvorizm","Konsyumerizm","Marketing miks"], d:3},
+    {q:"O'rganilayotgan obektning o'tmishdagi va hozirgi ma'lumotlarini tahlil qilishga asoslangan ilmiy asoslangan oldindan ko'ra bilish nima?", ans:"Prognozlash (bashorat qilish)", opts:["Prognozlash (bashorat qilish)","Analiz","Deduksiya","Sintez"], d:1},
+    {q:"Alohida shaxslar o'rtasida kattaroq foyda olish, savdo bozori, xomashyo manbalari uchun kurash nima deyiladi?", ans:"Raqobatdir", opts:["Raqobatdir","Duopoliya","Oligopoliya","Monopsoniya"], d:1},
+    {q:"Agar talabning elastikligi katta bo'lsa, sotish hajmi qanday o'zgaradi?", ans:"Narx ozgina tushgan holda sotish hajmi ham juda o'sishidir", opts:["Narx ozgina tushgan holda sotish hajmi ham juda o'sishidir","Narx tushishi bilan sotish hajmi o'zgarmaydi","Narx tushishi bilan sotish hajmi sekin o'sadi","Narx tushishi bilan sotish hajmi pasayadi"], d:2},
+    {q:"Motivasiya deganda nimani tushunasiz?", ans:"Kishilar faoliyatini ruhiy yo'llar bilan maqsadga muvofiq yo'naltirish", opts:["Kishilar faoliyatini ruhiy yo'llar bilan maqsadga muvofiq yo'naltirish","Xodimlarni jonli mehnat faoliyatiga rag'batlantiruvchi vositalar","Kishilarni xulq-atvorini o'rganish","Tanlashni amalga oshirishdagi xaridorlik xulq-atvori"], d:2},
+    {q:"Talabning qanday holatida ishlab chiqaruvchi reklamani ishlatmasa ham bo'ladi?", ans:"Juda katta talabdir", opts:["Juda katta talabdir","Talabni pasaytirish","Negativ talab","Salbiy talab"], d:2},
+    {q:"Alohida kishilar, korxonalar va davlat ehtiyojlarining umumiy xususiyatlari nimadan iborat?", ans:"Cheksiz va chegarasizdir", opts:["Cheksiz va chegarasizdir","Tarkiban bir xil","Miqdoriy o'lchamga ega","Nisbatan cheklangan"], d:2},
+    {q:"Quyidagilardan qaysi biri talab tushunchasining mazmunini to'laroq xarakterlaydi?", ans:"Bahoning mavjud darajasida sotib olish mumkin bo'lgan tovarlar miqdoridir", opts:["Bahoning mavjud darajasida sotib olish mumkin bo'lgan tovarlar miqdoridir","Ehtiyoj, xohish, istak","Ehtiyojning pul bilan ta'minlangan qismi","Sotishga chiqarilgan tovarlar miqdori"], d:3},
+    {q:"Asosiy iste'molchilar guruhlari talab va ehtiyojlarini muntazam tahlil qilish va raqobatchilik ustunligiga ega bo'lish nima?", ans:"Strategik marketingdir", opts:["Strategik marketingdir","Demarketing","Sinxromarketing","Remarketing"], d:3},
+    {q:"Firma faoliyatini diversifikasiyasi nima?", ans:"Yangi tovarlarni yangi bozorlar uchun ishlab chiqish", opts:["Yangi tovarlarni yangi bozorlar uchun ishlab chiqish","Mavjud bozorda sotishni takomillashtirish","Mavjud bozor uchun yangi tovar ishlab chiqish","Yangi bozorlar uchun firmani sotishni tashkil etish"], d:1},
+    {q:"Marketing byudjeti nima?", ans:"Marketing kompleksi elementlari bo'yicha aks ettirilgan ko'rsatkichlar tizimi", opts:["Marketing kompleksi elementlari bo'yicha aks ettirilgan ko'rsatkichlar tizimi","Marketing daromadi","Marketing xarajati","Marketing foydasi"], d:3},
+    {q:"Konsentrik (markazlashtirilgan) diversifikatsiya nima?", ans:"Firma assortimentini mavjud tovarlarga texnik va marketing nuqtai nazaridan o'xshash mahsulotlar bilan to'ldirish", opts:["Firma assortimentini mavjud tovarlarga texnik va marketing nuqtai nazaridan o'xshash mahsulotlar bilan to'ldirish","Markazlashtirilmagan diversifikatsiya","Modernizatsiya","Segmentasiya"], d:3},
+    {q:"Global marketing strategiyasiga nimalar kiradi?", ans:"Segmentasiya, internasionalizasiya va diversifikasiya", opts:["Segmentasiya, internasionalizasiya va diversifikasiya","Internasionalizasiya","Diversifikasiya","Segmentasiya"], d:3},
+    {q:"Bozorning qaysi turida iste'molchilar monopol mavqeiga ega bo'ladi?", ans:"Sof raqobatli va erkin bozor", opts:["Sof raqobatli va erkin bozor","Monopollashgan bozor","Monopol raqobatchi bozori","Oligopoliya"], d:2},
+    {q:"Regional marketing nima?", ans:"Biror hududda marketing faoliyatini tashkil etish", opts:["Biror hududda marketing faoliyatini tashkil etish","Korxona marketigi","Shaxs marketingi","Ijtimoiy marketing"], d:2},
+    {q:"Intensiv o'sish deganda nimani tushunasiz?", ans:"Firmaning amal qilib turgan doirasidagi asosan o'sish imkoniyatlari tahlil etiladi", opts:["Firmaning amal qilib turgan doirasidagi asosan o'sish imkoniyatlari tahlil etiladi","Qo'shimcha faoliyatni o'zlashtirish hisobiga o'sishga erishish","Firmaning tarmoq doirasida boshqa marketing tizimi elementlari bilan tahlil etiladi","Firmaning tarmoq doirasidan boshqa sohalarda tahlil etiladi"], d:2},
+    {q:"Integrasion o'sish qanday turlarga bo'linadi?", ans:"Regressiv integrasiya va progressiv integrasiya, gorizontal integrasiya", opts:["Regressiv integrasiya va progressiv integrasiya, gorizontal integrasiya","Progressiv integrasiya, regressiv integrasiya","Gorizontal integrasiya, regressiv integrasiya","Progressiv integrasiya, gorizontal integrasiya"], d:2},
+    {q:"Intensiv o'sishga qanday erishiladi?", ans:"Bozorga chuqurroq kirish, bozor hududlarini kengaytirish va tovarni takomillashtirish", opts:["Bozorga chuqurroq kirish, bozor hududlarini kengaytirish va tovarni takomillashtirish","Bozorga chuqurroq kirish","Bozor hududlarini kengaytirish","Tovarni takomillashtirish"], d:2},
+    {q:"Muayyan axborot manbalari orqali reklama xabarlarini eshitishi, ko'rishi va o'qishi mumkin bo'lgan barcha shaxslar nima deyiladi?", ans:"Reklama auditoriyasi", opts:["Reklama auditoriyasi","Xaridorlar auditoriyasi","Sotuvchilar auditoriyasi","Ishlab chiqaruvchilar auditoriyasi"], d:3},
+    {q:"Marketing axborot tizimini amalga oshirish uchun qanday asosiy jarayonlarni tashkil etish zarur?", ans:"To'plash, qayta ishlash, tahlil ma'lumotlarni uzatish va saqlash", opts:["To'plash, qayta ishlash, tahlil ma'lumotlarni uzatish va saqlash","Korxonani boshqarish bo'yicha qaror qabul qilish","Marketingni boshqarish bo'yicha qaror qabul qilish","Ayirboshlash"], d:1},
+    {q:"Marketing faoliyatini nazorat qilishning qanday turlarini bilasiz?", ans:"Yillik rejani bajarilishini nazorat qilish, foydadorlikni nazorat qilish va strategik nazorat", opts:["Yillik rejani bajarilishini nazorat qilish, foydadorlikni nazorat qilish va strategik nazorat","Strategik nazorat","Foydadorlikni nazorat qilish, yillik rejaning bajarilishini nazorat qilish","Yillik rejaning bajarilishini nazorat qilish"], d:1},
+    {q:"Xorijiy bozorga chiqish strategiyasiga nimalar kiradi?", ans:"To'g'ridan-to'g'ri eksport, korxonani investisiyalash va lisenziyalash", opts:["To'g'ridan-to'g'ri eksport, korxonani investisiyalash va lisenziyalash","To'g'ridan-to'g'ri eksport","Investisiyalash","Litsenziyalash"], d:3},
+    {q:"Kommersializatsiya nima?", ans:"Bozorga kirib borish vaqtini to'g'ri tanlash, turli bozorlarda faoliyat ko'rsatish hajmi va ketma-ketligi", opts:["Bozorga kirib borish vaqtini to'g'ri tanlash, turli bozorlarda faoliyat ko'rsatish hajmi va ketma-ketligi","Diversifikatsiya","Sinxronizatsiya","Reklama"], d:2},
+  ],
+  tadqiqotlari: [
+    {q:"Marketing tadqiqotlari deganda nimani tushunasiz?", ans:"Tartibga solingan va to'plangan ko'rsatkichlarni amaliyotda tatbiq etish va tayinli marketing holati xususida tashkilot uchun zaruriy axborotlar, ishlanmalar yig'indisi tashkil etadi", opts:["Tartibga solingan va to'plangan ko'rsatkichlarni amaliyotda tatbiq etish va tayinli marketing holati xususida tashkilot uchun zaruriy axborotlar, ishlanmalar yig'indisi tashkil etadi","Bozorni tartibga solish va ishlab chiqarishni rivojlantirish","Tartibga solingan bozorni tadqiq qilish va ularni kengaytirish","Tartibga solingan va to'plangan ko'rsatkichlarni qayta ishlab nazoratni kuchaytirish"], d:2},
+    {q:"Marketing kompleksining 4'P' modeli kim tomonidan va qachon ishlab chiqilgan?", ans:"Makkarti tomonidan 1960-yilda", opts:["Makkarti tomonidan 1960-yilda","Neyl Borden tomonidan 1964-yilda","Makkarti tomonidan 1964-yilda","Neyl Borden tomonidan 1960-yilda"], d:2},
+    {q:"Birlamchi axborotlarni to'plash usullariga nimalar kiradi?", ans:"Kuzatish, eksperiment, so'rov", opts:["Kuzatish, eksperiment, so'rov","Laboratoriya va organoleptik usullar","Sotsiologik, ekspert usullar","Analiz, sintez, rejalashtirish"], d:2},
+    {q:"Axborot to'plashning qaysi uslubi bir necha taqqoslanadigan holatlarni yaratishga asoslanadi?", ans:"Tajriba (eksperiment) uslubi", opts:["Tajriba (eksperiment) uslubi","Kuzatish uslubi","So'roq uslubi","Shaxsiy intervyu"], d:2},
+    {q:"Bozorni segmentlash atamasi birinchi marotaba qo'llanilgan?", ans:"Uindell Smit", opts:["Uindell Smit","Porter","Shelbi Hant","F. Kotler"], d:2},
+    {q:"20% iste'molchilar ma'lum markali tovarlarning 80%ini xarid qiladi — ushbu fikr kim tomonidan ishlab chiqilgan?", ans:"Volfredo Pareto", opts:["Volfredo Pareto","Uindell Smit","Makkarti","Shelbi Hant"], d:2},
+    {q:"Qaysi turdagi iste'molchilar yangi mahsulotlarni ulardan foydalanish tajribasiga ega bo'lgani uchungina sotib oladi?", ans:"Supernavatorlar", opts:["Supernavatorlar","Navatorlar","Konservatorlar","Superkonservatorlar"], d:3},
+    {q:"Xaridorlik xulq-atvoriga qanday omillar ta'sir etadi?", ans:"Madaniy, ijtimoiy, shaxsiy va psixologik omillar", opts:["Madaniy, ijtimoiy, shaxsiy va psixologik omillar","Madaniy, narx, shaxsiy va psixologik omillar","Madaniy, ijtimoiy va shaxsiy omillar","Madaniy, ijtimoiy, narx, mahsulot joylashuvi omillari"], d:3},
+    {q:"'Motivatsiya nazariyasi' qaysi olimga tegishli?", ans:"A.Maslou", opts:["A.Maslou","Z.Freyd","F.Kotler","T.Levit"], d:2},
+    {q:"Marketing razvedkasi nima?", ans:"Marketing tashqi muhitining o'zgarishi to'g'risidagi joriy axborotni to'plash bo'yicha tizimli faoliyat", opts:["Marketing tashqi muhitining o'zgarishi to'g'risidagi joriy axborotni to'plash bo'yicha tizimli faoliyat","Marketing axborot tizimi","Monitoring","Marketing tahlili"], d:3},
+    {q:"Axborotlar paydo bo'lish davriga ko'ra qanday turlarga bo'linadi?", ans:"Diskret, uzluksiz", opts:["Diskret, uzluksiz","Ichki, tashqi","Birlamchi, ikkilamchi","O'zgaruvchi, o'zgarmas"], d:2},
+    {q:"Marketingda iste'molchilar deganda ... tushuniladi", ans:"Tovar yoki xizmatni sotib olish zarurati yoki istagini belgilovchi shaxs", opts:["Tovar yoki xizmatni sotib olish zarurati yoki istagini belgilovchi shaxs","O'z ehtiyojini qondiruvchi bozor subyekti","Bevosita xaridni amalga oshiruvchi shaxs","Bevosita korxonaning faoliyatiga ta'sir etuvchi kuch"], d:2},
+    {q:"Marketing maqsadlarini ta'riflashdan avval ...", ans:"Joriy holat tahlilini o'tkazish", opts:["Joriy holat tahlilini o'tkazish","Har bir 4P bo'yicha strategiyani ishlab chiqish","Ishchi rejasini tuzish","Tashkilotning vazifasini ta'riflash"], d:2},
+    {q:"Xaridor bozori quyidagi holatda bozordagi vaziyatni boshqaradi", ans:"Taklif talabdan oshsa", opts:["Taklif talabdan oshsa","Iste'molchilar soni ko'p bo'lsa","Talab taklifdan oshsa","Bozorda tovar to'g'ri joylashsa"], d:2},
+    {q:"Marketing tadqiqotlarini o'tkazishda umumiy bosqichlar tavsifi nimalardan iborat?", ans:"Muammoni aniqlash, rejalashtirish, axborot to'plash va axborotni taqdim etish", opts:["Muammoni aniqlash, rejalashtirish, axborot to'plash va axborotni taqdim etish","Axborot to'plash, tahlil qilish va qayta ishlash","Axborotni to'plash","Xaridorlarni ehtiyojlarini bosqichma-bosqich aniqlash"], d:3},
+    {q:"Segmentlashning qaysi strategiyasi tovarlarning shaxsiy buyurtmalar bo'yicha ishlab chiqilishiga olib keladi?", ans:"Gipersegmentatsiya", opts:["Gipersegmentatsiya","Kontrsegmentatsiya","Dispersli segmentlash","Interpolyatsion segmentlash"], d:3},
+    {q:"To'g'ri fikrni tanlang: MARKETING axborot tizimi bu ...", ans:"Muntazam asosda axborotlarni olish, saqlash, tahlil qilish va tarqatish uchun rasmiylashtirilgan harakatlar tartibi", opts:["Muntazam asosda axborotlarni olish, saqlash, tahlil qilish va tarqatish uchun rasmiylashtirilgan harakatlar tartibi","Marketing tadqiqotlariga oid axborotlar majmui","Ma'lumotlar bazasi bilan o'zaro ta'sirlashadigan axborot tizimi","Ichki va tashqi axborotlar yig'indisi"], d:2},
+    {q:"Axborot manbalariga quyidagilar kiradi", ans:"Birlamchi va ikkilamchi", opts:["Birlamchi va ikkilamchi","Dala va kabinet tadqiqotlari","Sifat va miqdor tadqiqotlari","Ikkilamchi va asosiy"], d:2},
+    {q:"Anketalardagi savollar ... bo'ladi", ans:"Ochiq va yopiq", opts:["Ochiq va yopiq","Ochiq va aralash","Ochiq va yashirincha","Ochiq va qo'shimcha savollar bilan"], d:2},
+    {q:"Marketing tadqiqotlarining asosiy maqsadi qaysi?", ans:"Boshqaruv qarorlarini axborot bilan ta'minlash", opts:["Boshqaruv qarorlarini axborot bilan ta'minlash","Savdo bo'limi faoliyatini bevosita boshqarish","Ishlab chiqarish quvvatini rejalashtirish","Moliyaviy hisobotlarni rasmiylashtirish"], d:2},
+    {q:"Marketing tadqiqotlarining 'ikki yo'nalishi' qaysilar?", ans:"Muammoni aniqlash va muammoni yechish tadqiqotlari", opts:["Muammoni aniqlash va muammoni yechish tadqiqotlari","Strategik va operatsion marketing faoliyati","Ishlab chiqarish va sotuv boshqaruvi","Moliyaviy va investitsion tahlil yo'nalishlari"], d:2},
+    {q:"Marketing tadqiqotining umumiy bosqichlari ketma-ketligi qaysi?", ans:"Muammoni aniqlash → dizayn → ma'lumot yig'ish → tahlil → hisobot", opts:["Muammoni aniqlash → dizayn → ma'lumot yig'ish → tahlil → hisobot","Maqsad → reklama → sotuv → servis → audit","Narx → qadoq → brend → servis → kafolat","Segment → pozitsiya → dizayn → sotuv → nazorat"], d:2},
+    {q:"Tadqiqot rejasini (plan) tuzishda asosiy hujjat qaysi?", ans:"Tadqiqot dizayni (research design)", opts:["Tadqiqot dizayni (research design)","Savdo shartnomasi loyihasi","Ichki buyruq va farmoyishlar","Ombor kirim-chiqim reyestri"], d:3},
+    {q:"'Eksplorativ' (exploratory) tadqiqotning asosiy vazifasi qaysi?", ans:"Muammoni aniqlashtirish va gipoteza shakllantirish", opts:["Muammoni aniqlashtirish va gipoteza shakllantirish","Bozor ulushini aniq foizda hisoblash","Sotuv hajmini prognozlashni yakunlash","Reklama byudjetini qat'iy belgilash"], d:3},
+    {q:"Marketing mix 4P modeli qaysi elementlardan iborat?", ans:"Mahsulot, narx, taqsimot, rag'batlantirish", opts:["Mahsulot, narx, taqsimot, rag'batlantirish","Mahsulot, odamlar, jarayon, muhit","Narx, foyda, reja, samaradorlik","Pozitsiya, mahsulot, ishlab chiqarish, to'lov"], d:2},
+    {q:"Marketing axborot tizimi (MIS)ning vazifasi qaysi?", ans:"Axborotni yig'ish, saqlash, qayta ishlash va tarqatish", opts:["Axborotni yig'ish, saqlash, qayta ishlash va tarqatish","Savdo xodimlari ish jadvalini tuzish","Ishlab chiqarish uskunasini sozlash","Transport marshrutini optimallashtirish"], d:2},
+    {q:"Fokus-guruh (focus group) usuli ko'proq nimani aniqlashda samarali?", ans:"Motivlar, fikrlar va munosabatlarning sabablarini", opts:["Motivlar, fikrlar va munosabatlarning sabablarini","Bozor ulushini aniq foizda hisoblashni","Narx elastikligini regressiya orqali topishni","Segment hajmini statistik hisoblashni"], d:2},
+    {q:"Panel usuli (panel method) nimani anglatadi?", ans:"Bir xil respondentlar guruhi bilan davriy kuzatuv", opts:["Bir xil respondentlar guruhi bilan davriy kuzatuv","Turli respondentlar bilan bir martalik intervyu","Faqat telefon orqali so'rov o'tkazish","Faqat internet orqali fokus-guruh o'tkazish"], d:3},
+    {q:"Kuzatuv (observation) usulining asosiy mazmuni qaysi?", ans:"Xulq-atvorni bevosita kuzatib, qayd etish", opts:["Xulq-atvorni bevosita kuzatib, qayd etish","Respondentdan savol-javob orqali ma'lumot olish","Sabab-oqibatni tajribada tekshirish","Tayyor ma'lumotlarni ikkilamchi tahlil qilish"], d:2},
+    {q:"Bozor segmentatsiyasi nimaga asoslanadi?", ans:"Iste'molchilarni o'xshash belgilariga ko'ra guruhlashga", opts:["Iste'molchilarni o'xshash belgilariga ko'ra guruhlashga","Mahsulot tannarxini kamaytirishga","Reklama byudjetini oshirishga","Savdo xodimlari sonini ko'paytirishga"], d:2},
+    {q:"PEST tahlili odatda qaysi omillarni o'rganadi?", ans:"Siyosiy, iqtisodiy, ijtimoiy va texnologik omillarni", opts:["Siyosiy, iqtisodiy, ijtimoiy va texnologik omillarni","Mahsulot, narx, taqsimot va rag'batlantirishni","Mijoz, raqobatchi, kanal va servisni","Daromad, xarajat, foyda va likvidlikni"], d:3},
+    {q:"Segmentatsiya tamoyillaridan 'o'lchovlilik' (measurability) nimani anglatadi?", ans:"Segment hajmi va xarid quvvatini baholash mumkinligini", opts:["Segment hajmi va xarid quvvatini baholash mumkinligini","Segment doimiy ravishda o'zgarmasligini","Segmentda raqobatchi bo'lmasligini","Segment faqat bitta hududda bo'lishini"], d:3},
+    {q:"Savolnoma tuzishda 'filtr savol'ning vazifasi qaysi?", ans:"Mos kelmaydigan respondentlarni keyingi savollardan chiqarish", opts:["Mos kelmaydigan respondentlarni keyingi savollardan chiqarish","Javob variantlari sonini kamaytirish","Reklama kanalini tanlash","Namuna hajmini avtomatik oshirish"], d:3},
+    {q:"Regressiya tahlilining asosiy maqsadi qaysi?", ans:"Bog'liq o'zgaruvchini omillar orqali prognozlash", opts:["Bog'liq o'zgaruvchini omillar orqali prognozlash","Segmentlarni tasniflash va nomlash","Fokus-guruh ishtirokchilarini tanlash","Savolnoma savollarini tartiblash"], d:3},
+    {q:"Marketing tadqiqoti hisobotining 'executive summary' qismi nimani beradi?", ans:"Asosiy natijalar va tavsiyalarni qisqa bayon qiladi", opts:["Asosiy natijalar va tavsiyalarni qisqa bayon qiladi","Barcha xom ma'lumotlar to'plamini ilova qiladi","Faqat savolnoma blankasini keltiradi","Faqat kompaniya tarixini batafsil yoritadi"], d:2},
+  ],
+  kommunikatsiya: [
+    {q:"Birinchi bo'lib reklama qaerda paydo bo'ldi?", ans:"Misrda", opts:["Misrda","Rossiyada","Yaponiyada","Amerikada"], d:2},
+    {q:"Savdo bu ...", ans:"Mehnat vositalarini ayirboshlashdir", opts:["Mehnat vositalarini ayirboshlashdir","Reklama dvigateli","To'lovlar orqali amalga oshiriladi","Bevosita ko'rinishda amalga oshiriladi"], d:2},
+    {q:"Qaerda birinchi reklama agentligi paydo bo'ldi?", ans:"Rossiyada", opts:["Rossiyada","Misrda","Amerikada","Yaponiyada"], d:2},
+    {q:"Marketing kommunikatsiyalari vositalari to'g'ri keltirilgan qatorni toping?", ans:"Reklama, shaxsiy sotuv, sotishni rag'batlantirish, jamoatchilik bilan aloqalar", opts:["Reklama, shaxsiy sotuv, sotishni rag'batlantirish, jamoatchilik bilan aloqalar","Reklama, dilerlar faoliyati, birja savdolari","Reklama, elektron tijorat, kataloglar bo'yicha sotish","Shaxsiy sotuv, interaktiv xizmat, taqdimotlar"], d:1},
+    {q:"'Pablik-rileyshne' deb nimaga aytiladi?", ans:"Jamoatchilik bilan aloqa o'rnatish va jamoatchilik fikrini uyushtirish, korxona va uning tovarlariga yaxshi munosabat shakllantirish", opts:["Jamoatchilik bilan aloqa o'rnatish va jamoatchilik fikrini uyushtirish, korxona va uning tovarlariga yaxshi munosabat shakllantirish","Tovarni potensial mijozlarga bevosita muloqot qilish vaziyatida taqdim etish va sotish","Aniq maqsadga yo'naltirilgan, ma'lum va nomi aniq manba tomonidan haqi to'langan joyda tarqaladigan axborot","Tovarlarni harid qilishni rag'batlantirishga imkon beradigan undovchi chora-tadbirlar kompleksi"], d:2},
+    {q:"Shaxsiy sotuv deb nimaga aytiladi?", ans:"Tovarni potensial mijozlarga ular bilan bevosita muloqot qilish vaziyatida taqdim etish va sotish hamda ular bilan uzoq muddatli aloqalarni o'rnatish maqsadini ko'zlaydigan jarayon", opts:["Tovarni potensial mijozlarga ular bilan bevosita muloqot qilish vaziyatida taqdim etish va sotish hamda ular bilan uzoq muddatli aloqalarni o'rnatish maqsadini ko'zlaydigan jarayon","Tovarlarni harid qilishni rag'batlantirishga imkon beradigan undovchi chora-tadbirlar kompleksi","Aniq maqsadga yo'naltirilgan, ma'lum va nomi aniq manba tomonidan haqi to'langan joyda tarqaladigan axborot","Jamoatchilik bilan aloqa o'rnatish"], d:2},
+    {q:"Sotishni rag'batlantirish bu ...", ans:"Ma'lum bir muddatda sotish hajmini oshirish maqsadida turli rag'batlantirish vositalaridan foydalanish", opts:["Ma'lum bir muddatda sotish hajmini oshirish maqsadida turli rag'batlantirish vositalaridan foydalanish","Tovar sotishni tezlashtirish uchun tashkil etiladigan maxsus ko'rgazma va yarmarkalar","Iste'molchilarga tovar sotishni tezlashtirish uchun qo'shimcha servis tashkil etish","Yilning turli mavsumiy vaqtlarida tashkil etiladigan maxsus tadbirlar majmui"], d:2},
+    {q:"PRning asosiy maqsadi nimadan iborat?", ans:"Jamoatchilik bilan aloqalarni yo'lga qo'yish", opts:["Jamoatchilik bilan aloqalarni yo'lga qo'yish","Sotishni tashkil etish","Tovar va xizmatlar haqida axborot berish","Ommani yig'ish va fikrini o'rganish"], d:3},
+    {q:"'Kommunikatsiya' termini qaysi tildan olingan?", ans:"Lotincha", opts:["Lotincha","Inglizcha","Ispancha","Grekcha"], d:2},
+    {q:"Reklama — ...", ans:"Marketing kommunikatsiyalari tizimining muhim unsurlaridan biri", opts:["Marketing kommunikatsiyalari tizimining muhim unsurlaridan biri","Yagona marketing strategiyasi doirasida reklama ishlab chiqarishga faol ta'sir ko'rsatadi","Talabni shakllantirish emas, balki iste'molchilarning tanlab olingan segmenti ichida uni boshqarish","Marketing tizimining mantiqiy tarkibiy qismi"], d:2},
+    {q:"Reklama yo'naltirilgan shaxs yoki shaxslar guruhi kim?", ans:"Reklamadan foydalanuvchi", opts:["Reklamadan foydalanuvchi","Reklama tarqatuvchi","Reklama beruvchi","Reklama tayyorlovchi"], d:2},
+    {q:"Reklama xarajatlarini rejalashtirish kimning funksiyasi?", ans:"Reklama beruvchi", opts:["Reklama beruvchi","Reklamadan foydalanuvchi","Reklama tarqatuvchi","Reklama tayyorlovchi"], d:2},
+    {q:"Reklama beruvchi reklama qilish jarayonida nimani hisobga olish muhim?", ans:"Samaradorlik", opts:["Samaradorlik","Vositalar","Psixologik ta'sir","Matn"], d:2},
+    {q:"Reklama rentabelligi bu ...", ans:"Olingan foydaning xarajatlarga nisbatidir", opts:["Olingan foydaning xarajatlarga nisbatidir","Tadbir samarasi uni o'tkazish xarajatlariga teng","Tadbir samarasi uni o'tkazish xarajatlaridan katta","Tadbir samarasi uni o'tkazish xarajatlaridan kam"], d:2},
+    {q:"O'zbekiston Respublikasida 'Reklama to'g'risida'gi qonun qachon qabul qilingan?", ans:"2022 yil, 7 iyunda", opts:["2022 yil, 7 iyunda","2021 yil, 20 yanvarda","1999 yil, 24 noyabrda","1998 yil, 15 dekabrda"], d:2},
+    {q:"Psixologik ta'sir ketma-ketligi to'g'ri ko'rsatilgan javob?", ans:"E'tibor, qiziqish, motiv, xohish, faoliyat", opts:["E'tibor, qiziqish, motiv, xohish, faoliyat","Qiziqish, e'tibor, xohish, faoliyat","E'tibor, xohish, faoliyat, qiziqish, motiv","Xohish, motiv, qiziqish, faoliyat, e'tibor"], d:2},
+    {q:"Reklama to'g'risidagi qonun nechta moddadan iborat?", ans:"30 modda", opts:["30 modda","28 modda","45 modda","52 modda"], d:2},
+    {q:"Qiyosiy reklama nima?", ans:"Raqobatchi mahsulotga bevosita yoki bilvosita aynanlashtirilgan reklama", opts:["Raqobatchi mahsulotga bevosita yoki bilvosita aynanlashtirilgan reklama","Mahsulotni boshqa mahsulot sifatiga tenglashtirish","Tovar haridorgirligini oshirish uchun haridorgir tovar reklamasini qo'llash","Ikki xil tarkibli bir xil markali, etiketkali mahsulot reklamasi"], d:1},
+    {q:"'Teskari aloqa' marketing kommunikatsiyasida nimani anglatadi?", ans:"Yuborilgan xabarning qabul qiluvchiga ta'sirini va javob reaksiyasini", opts:["Yuborilgan xabarning qabul qiluvchiga ta'sirini va javob reaksiyasini","Reklama roligining uzunligini","Narx o'zgarishini","Mahsulot assortimentini"], d:2},
+    {q:"Shaxssiz kommunikatsiyaga eng mos misol qaysi?", ans:"Televideniyedagi reklama roligi", opts:["Televideniyedagi reklama roligi","Savdo vakilining mijoz bilan muzokarasi","Menejerning mijozga individual qo'ng'irog'i","B2B uchrashuvdagi taqdimot"], d:2},
+    {q:"Sotishni rag'batlantirishning asosiy vazifasi nimaga qaratiladi?", ans:"Qisqa muddatda sotuvni tezlashtirish va hajmni oshirishga", opts:["Qisqa muddatda sotuvni tezlashtirish va hajmni oshirishga","Faqat brend imijini shakllantirishga","Faqat narxni oshirishga","Faqat ommaviylikni kamaytirishga"], d:2},
+    {q:"PR (pablik rileyshnz)ning reklama bilan asosiy farqi qaysi?", ans:"PR ishonch va obro'ni shakllantirishga ko'proq yo'naltiriladi", opts:["PR ishonch va obro'ni shakllantirishga ko'proq yo'naltiriladi","PR faqat pul to'lanadigan e'lonlardan iborat","Reklama faqat bepul axborotdir","PR faqat narxni belgilaydi"], d:2},
+    {q:"Press-reliz (press release) PRning qaysi yo'nalishiga kiradi?", ans:"OAV bilan aloqalar (media relations)", opts:["OAV bilan aloqalar (media relations)","Mahsulotni qadoqlash dizayni","Ulgurji savdo shartnomasi","Kadrlar bo'limi motivatsiyasi"], d:2},
+    {q:"Media-rejalashtirishda 'Reach' ko'rsatkichi nimani bildiradi?", ans:"Ma'lum davrda xabarni kamida bir marta ko'rgan auditoriya ulushi", opts:["Ma'lum davrda xabarni kamida bir marta ko'rgan auditoriya ulushi","Bir kishining o'rtacha ko'rish soni","Reklama roligining davomiyligi","Bir dona banner narxi"], d:3},
+    {q:"Integratsiyalashgan marketing kommunikatsiyasi (IMC)ning asosiy g'oyasi qaysi?", ans:"Barcha kanallarda yagona va uyg'un xabar berish", opts:["Barcha kanallarda yagona va uyg'un xabar berish","Faqat TV reklamasiga tayanish","Reklamani PRdan ajratib yuborish","Faqat narx orqali raqobatlashish"], d:3},
+    {q:"Brend imiji (brand image) nimani anglatadi?", ans:"Iste'molchi ongida shakllangan brend haqidagi tasavvur", opts:["Iste'molchi ongida shakllangan brend haqidagi tasavvur","Kompaniyaning ichki reglamenti","Sotuvchilar soni","Reklama banneri o'lchami"], d:2},
+    {q:"To'g'ridan-to'g'ri marketingning asosiy belgisi qaysi?", ans:"Mijoz bilan bevosita aloqa va o'lchanadigan javobga yo'naltirilish", opts:["Mijoz bilan bevosita aloqa va o'lchanadigan javobga yo'naltirilish","Faqat ko'rgazmada ishlash","Faqat tashqi reklama","Faqat PR tadbiri"], d:2},
+    {q:"Merchandayzingning asosiy maqsadi qaysi?", ans:"Savdo nuqtasida tovarni jozibali taqdim etib, xaridni yengillashtirish", opts:["Savdo nuqtasida tovarni jozibali taqdim etib, xaridni yengillashtirish","Ishlab chiqarish quvvatini oshirish","Buxgalteriya balansini yopish","Transport tariflarini belgilash"], d:2},
+    {q:"AIDA modelidagi 'Desire' bosqichi nimani anglatadi?", ans:"Xarid istagini shakllantirish", opts:["Xarid istagini shakllantirish","Xabarni kodlashtirish","Narxni tushirish","Yetkazib berishni tezlatish"], d:3},
+    {q:"Reklama tarqatish kanallari tanlashda eng muhim mezonlardan biri qaysi?", ans:"Maqsadli auditoriyaga mos qamrov va kontakt narxi", opts:["Maqsadli auditoriyaga mos qamrov va kontakt narxi","Faqat dizayn chiroyliligi","Faqat ofis manzili","Faqat shior uzunligi"], d:2},
+    {q:"Sponsorlash (homiylik) kommunikatsiyada ko'proq qaysi maqsadga xizmat qiladi?", ans:"Obro'-e'tibor va brend assotsiatsiyalarini mustahkamlashga", opts:["Obro'-e'tibor va brend assotsiatsiyalarini mustahkamlashga","Faqat mahsulotni arzonlashtirishga","Faqat xodimlarni yollashga","Faqat kredit olishga"], d:3},
+    {q:"'Positioning' (pozitsiyalash) kommunikatsiyada nimani anglatadi?", ans:"Brendni raqobatchilardan farqli, aniq qiymat taklifi bilan ongda joylashtirish", opts:["Brendni raqobatchilardan farqli, aniq qiymat taklifi bilan ongda joylashtirish","Mahsulotni omborga joylashtirish","Reklama matnini qisqartirish","Narxni oshirish"], d:2},
+  ]
+};
+
+// ============================================================
+//  STATE
+// ============================================================
+let selectedSubjects = ['asoslari','tadqiqotlari','kommunikatsiya'];
+let selectedMode = 'exam';
+let questions = [];
+let current = 0;
+let correct = 0;
+let wrong = 0;
+let answered = false;
+let timerInterval = null;
+let timeLeft = 3600;
+let subjectStats = {};
+
+const modeConfig = {
+  exam:     { count: 50, time: 3600, showAnswer: false },
+  practice: { count: 20, time: null,  showAnswer: true  },
+  quick:    { count: 10, time: 1200, showAnswer: false  }
+};
+
+// ============================================================
+//  HOME FUNCTIONS
+// ============================================================
+function toggleSubject(el) {
+  const s = el.dataset.subject;
+  el.classList.toggle('selected');
+  if (el.classList.contains('selected')) {
+    if (!selectedSubjects.includes(s)) selectedSubjects.push(s);
+  } else {
+    selectedSubjects = selectedSubjects.filter(x => x !== s);
+  }
+}
+
+function selectMode(el) {
+  document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('selected'));
+  el.classList.add('selected');
+  selectedMode = el.dataset.mode;
+}
+
+// ============================================================
+//  SHUFFLE
+// ============================================================
+function shuffle(arr) {
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i+1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
+function buildQuestions() {
+  let pool = [];
+  selectedSubjects.forEach(s => {
+    allQuestions[s].forEach(q => pool.push({...q, subject: s}));
+  });
+  pool = shuffle(pool);
+  const cfg = modeConfig[selectedMode];
+  const count = Math.min(cfg.count, pool.length);
+  return pool.slice(0, count).map(q => {
+    const opts = shuffle([...q.opts]);
+    return { ...q, shuffledOpts: opts };
+  });
+}
+
+// ============================================================
+//  QUIZ
+// ============================================================
+function startQuiz() {
+  if (selectedSubjects.length === 0) {
+    alert("Iltimos, kamida bitta fan tanlang!");
+    return;
+  }
+  questions = buildQuestions();
+  current = 0; correct = 0; wrong = 0;
+  subjectStats = {};
+  selectedSubjects.forEach(s => subjectStats[s] = {correct:0,wrong:0});
+
+  document.getElementById('home').classList.remove('active');
+  document.getElementById('quiz').classList.add('active');
+
+  const cfg = modeConfig[selectedMode];
+  if (cfg.time) {
+    timeLeft = cfg.time;
+    startTimer();
+  } else {
+    document.getElementById('timerDisplay').textContent = '∞';
+  }
+
+  loadQuestion();
+}
+
+function startTimer() {
+  clearInterval(timerInterval);
+  timerInterval = setInterval(() => {
+    timeLeft--;
+    const m = Math.floor(timeLeft / 60);
+    const s = timeLeft % 60;
+    const el = document.getElementById('timerDisplay');
+    el.textContent = `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+    el.className = 'timer-chip';
+    if (timeLeft <= 300) el.classList.add('warning');
+    if (timeLeft <= 60) { el.classList.remove('warning'); el.classList.add('danger'); }
+    if (timeLeft <= 0) { clearInterval(timerInterval); showResult(); }
+  }, 1000);
+}
+
+function loadQuestion() {
+  answered = false;
+  document.getElementById('nextBtn').style.display = 'none';
+  document.getElementById('feedbackBox').style.display = 'none';
+
+  const q = questions[current];
+  const total = questions.length;
+  const pct = (current / total) * 100;
+
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressText').textContent = `Savol ${current+1} / ${total}`;
+  document.getElementById('correctCount').textContent = correct;
+  document.getElementById('wrongCount').textContent = wrong;
+  document.getElementById('qNumber').textContent = `Savol ${current+1}`;
+
+  const diffLabels = {1:'Oson', 2:"O'rtacha", 3:'Qiyin'};
+  const db = document.getElementById('diffBadge');
+  db.textContent = `⬤ ${diffLabels[q.d]}`;
+  db.className = `difficulty-badge diff-${q.d}`;
+
+  const fanNames = {asoslari:'Marketing Asoslari', tadqiqotlari:'Marketing Tadqiqotlari', kommunikatsiya:'Marketing Kommunikatsiyasi'};
+  document.getElementById('fanBadge').textContent = fanNames[q.subject];
+  document.getElementById('quizSubjectTag').textContent = fanNames[q.subject].split(' ')[1];
+  document.getElementById('questionText').textContent = q.q;
+
+  const ol = document.getElementById('optionsList');
+  ol.innerHTML = '';
+  const letters = ['A','B','C','D'];
+  q.shuffledOpts.forEach((opt, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'option-btn';
+    btn.innerHTML = `<span class="option-letter">${letters[i]}</span><span>${opt}</span><span class="option-icon"></span>`;
+    btn.onclick = () => selectAnswer(opt, btn, q);
+    ol.appendChild(btn);
+  });
+}
+
+function selectAnswer(chosen, btnEl, q) {
+  if (answered) return;
+  answered = true;
+
+  const isCorrect = chosen === q.ans;
+  if (isCorrect) {
+    correct++;
+    subjectStats[q.subject].correct++;
+    btnEl.classList.add('correct');
+    btnEl.querySelector('.option-icon').textContent = '✓';
+  } else {
+    wrong++;
+    subjectStats[q.subject].wrong++;
+    btnEl.classList.add('wrong');
+    btnEl.querySelector('.option-icon').textContent = '✗';
+    // reveal correct
+    document.querySelectorAll('.option-btn').forEach(b => {
+      if (b.querySelector('span:nth-child(2)').textContent === q.ans) {
+        b.classList.add('reveal-correct');
+      }
+    });
+  }
+
+  document.querySelectorAll('.option-btn').forEach(b => b.disabled = true);
+
+  const fb = document.getElementById('feedbackBox');
+  if (modeConfig[selectedMode].showAnswer) {
+    fb.style.display = 'block';
+    if (isCorrect) {
+      fb.className = 'feedback-box correct';
+      fb.textContent = '✓ To\'g\'ri javob!';
+    } else {
+      fb.className = 'feedback-box wrong';
+      fb.textContent = `✗ Noto'g'ri. To'g'ri javob: ${q.ans}`;
+    }
+  }
+
+  document.getElementById('correctCount').textContent = correct;
+  document.getElementById('wrongCount').textContent = wrong;
+  document.getElementById('nextBtn').style.display = 'block';
+}
+
+function nextQuestion() {
+  current++;
+  if (current >= questions.length) {
+    clearInterval(timerInterval);
+    showResult();
+  } else {
+    loadQuestion();
+  }
+}
+
+// ============================================================
+//  RESULTS
+// ============================================================
+function showResult() {
+  document.getElementById('quiz').classList.remove('active');
+  document.getElementById('result').classList.add('active');
+
+  const total = questions.length;
+  const pct = Math.round((correct / total) * 100);
+
+  let grade, emoji, label, pass;
+  if (pct >= 85)      { grade=5; emoji='🏆'; label='A\'lo! Mukammal natija!'; pass=true; }
+  else if (pct >= 70) { grade=4; emoji='🎯'; label="Yaxshi! Imtihondan o'tasiz!"; pass=true; }
+  else if (pct >= 55) { grade=3; emoji='✅'; label="Qoniqarli! Imtihondan o'tasiz!"; pass=true; }
+  else                { grade=2; emoji='📖'; label="Imtihondan o'tolmadingiz. Ko'proq o'qing!"; pass=false; }
+
+  document.getElementById('resultEmoji').textContent = emoji;
+  document.getElementById('gradeDisplay').textContent = grade;
+  document.getElementById('gradeLabel').textContent = label;
+  document.getElementById('resCorrect').textContent = correct;
+  document.getElementById('resWrong').textContent = total - correct;
+  document.getElementById('resPercent').textContent = pct + '%';
+
+  // Subject breakdown
+  const subjectColors = {asoslari:'#4f8ef7', tadqiqotlari:'#a78bfa', kommunikatsiya:'#22d3a0'};
+  const subjectShort = {asoslari:'Asoslari', tadqiqotlari:'Tadqiqotlari', kommunikatsiya:'Kommunikatsiya'};
+  const sb = document.getElementById('subjectBreakdown');
+  sb.innerHTML = '';
+  selectedSubjects.forEach(s => {
+    const st = subjectStats[s];
+    const tot = st.correct + st.wrong;
+    if (tot === 0) return;
+    const p = Math.round((st.correct/tot)*100);
+    const chip = document.createElement('div');
+    chip.className = 'sb-chip';
+    chip.innerHTML = `<span class="dot" style="background:${subjectColors[s]}"></span><strong>${subjectShort[s]}</strong>: ${st.correct}/${tot} (${p}%)`;
+    sb.appendChild(chip);
+  });
+
+  const vc = document.getElementById('verdictCard');
+  vc.className = pass ? 'verdict-card pass' : 'verdict-card fail';
+  if (pass) {
+    vc.innerHTML = `🎉 <strong>Tabriklaymiz!</strong> Siz ${pct}% to'g'ri javob berdingiz. Baho: <strong>${grade}</strong>. GOS imtihonidan muvaffaqiyatli o'tasiz!`;
+  } else {
+    vc.innerHTML = `📚 Siz ${pct}% to'g'ri javob berdingiz. Imtihondan o'tish uchun kamida 55% zarur. Qo'shimcha tayyorgarlik ko'ring!`;
+  }
+}
+
+function restartQuiz() {
+  document.getElementById('result').classList.remove('active');
+  document.getElementById('quiz').classList.add('active');
+  questions = buildQuestions();
+  current = 0; correct = 0; wrong = 0;
+  selectedSubjects.forEach(s => subjectStats[s] = {correct:0,wrong:0});
+  const cfg = modeConfig[selectedMode];
+  if (cfg.time) { timeLeft = cfg.time; startTimer(); }
+  loadQuestion();
+}
+
+function goHome() {
+  clearInterval(timerInterval);
+  document.getElementById('result').classList.remove('active');
+  document.getElementById('home').classList.add('active');
+}
+
+// Init: select all subjects
+document.querySelectorAll('.subject-card').forEach(c => c.classList.add('selected'));
+</script>
+</body>
+</html>
